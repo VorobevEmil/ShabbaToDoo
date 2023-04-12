@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ShabbaToDoo.Application.Common.Interfaces.Services;
-using ShabbaToDoo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using ShabbaToDoo.Domain.Entities;
+using ShabbaToDoo.Infrastructure.Persistence;
 
 namespace ShabbaToDoo.Infrastructure
 {
@@ -19,11 +19,23 @@ namespace ShabbaToDoo.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddPersistence();
+            services.AddPersistence(configuration);
+            services.AddServices();
             services.AddIdentity();
             services.AddJwtAuthentication(configuration);
+
+            return services;
+        }
+
+        public static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
+        {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             return services;
@@ -44,13 +56,6 @@ namespace ShabbaToDoo.Infrastructure
 
             return services;
         }
-
-        public static IServiceCollection AddPersistence(this IServiceCollection services)
-        {
-
-            return services;
-        }
-
 
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, ConfigurationManager configuration)
         {
