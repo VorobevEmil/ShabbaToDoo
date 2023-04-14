@@ -3,9 +3,9 @@ using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ShabbaToDoo.Application.Authentication.Commands.Register;
-using ShabbaToDoo.Application.Authentication.Common;
-using ShabbaToDoo.Application.Authentication.Queries.Login;
+using ShabbaToDoo.Application.CQRS.Authentication.Commands.Register;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
+using ShabbaToDoo.Application.CQRS.Authentication.Queries.Login;
 using ShabbaToDoo.Contracts.Authentication;
 
 namespace ShabbaToDoo.Api.Controllers
@@ -32,7 +32,7 @@ namespace ShabbaToDoo.Api.Controllers
             ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(
-                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                userAuthResult => Ok(_mapper.Map<AuthenticationResponse>(userAuthResult)),
                 Problem
             );
         }

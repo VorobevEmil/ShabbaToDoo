@@ -1,7 +1,7 @@
 ﻿using Mapster;
-using ShabbaToDoo.Application.Authentication.Commands.Register;
-using ShabbaToDoo.Application.Authentication.Common;
-using ShabbaToDoo.Application.Authentication.Queries.Login;
+using ShabbaToDoo.Application.CQRS.Authentication.Commands.Register;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
+using ShabbaToDoo.Application.CQRS.Authentication.Queries.Login;
 using ShabbaToDoo.Contracts.Authentication;
 
 namespace ShabbaToDoo.Api.Common.Mapping

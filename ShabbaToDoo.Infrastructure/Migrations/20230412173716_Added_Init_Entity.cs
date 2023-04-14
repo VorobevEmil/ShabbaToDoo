@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShabbaToDoo.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Added_Init_Entities : Migration
+    public partial class Added_Init_Entity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,15 +75,15 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                 name: "UserProjects",
                 columns: table => new
                 {
-                    ProjectsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UsersId = table.Column<string>(type: "text", nullable: false)
+                    MembersId = table.Column<string>(type: "text", nullable: false),
+                    ProjectsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserProjects", x => new { x.ProjectsId, x.UsersId });
+                    table.PrimaryKey("PK_UserProjects", x => new { x.MembersId, x.ProjectsId });
                     table.ForeignKey(
-                        name: "FK_UserProjects_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_UserProjects_AspNetUsers_MembersId",
+                        column: x => x.MembersId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -131,9 +131,9 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProjects_UsersId",
+                name: "IX_UserProjects_ProjectsId",
                 table: "UserProjects",
-                column: "UsersId");
+                column: "ProjectsId");
         }
 
         /// <inheritdoc />

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ShabbaToDoo.Application.Authentication.Queries.Login
+namespace ShabbaToDoo.Application.CQRS.Authentication.Queries.Login
 {
     public class LoginQueryValidator : AbstractValidator<LoginQuery>
     {

@@ -11,7 +11,7 @@ using ShabbaToDoo.Infrastructure.Persistence;
 
 namespace ShabbaToDoo.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ShabbaToDooDbContext))]
     [Migration("20230409151027_Init")]
     partial class Init
     {

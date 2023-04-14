@@ -3,10 +3,10 @@ using MediatR;
 using ShabbaToDoo.Application.Common.Interfaces.Authentication;
 using ShabbaToDoo.Domain.Entities;
 using ShabbaToDoo.Domain.Common.Errors;
-using ShabbaToDoo.Application.Authentication.Common;
 using Microsoft.AspNetCore.Identity;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
 
-namespace ShabbaToDoo.Application.Authentication.Commands.Register
+namespace ShabbaToDoo.Application.CQRS.Authentication.Commands.Register
 {
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
     {

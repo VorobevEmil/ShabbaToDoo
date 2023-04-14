@@ -10,8 +10,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ShabbaToDoo.Application.Common.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
+using ShabbaToDoo.Application.Common.Interfaces.Persistence;
 using ShabbaToDoo.Domain.Entities;
 using ShabbaToDoo.Infrastructure.Persistence;
+using ShabbaToDoo.Infrastructure.Persistence.Repositories;
 
 namespace ShabbaToDoo.Infrastructure
 {
@@ -23,21 +25,21 @@ namespace ShabbaToDoo.Infrastructure
             services.AddServices();
             services.AddIdentity();
             services.AddJwtAuthentication(configuration);
+            services.AddHttpContextAccessor();
 
             return services;
         }
 
         public static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ShabbaToDooDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
             return services;
         }
 
@@ -51,7 +53,7 @@ namespace ShabbaToDoo.Infrastructure
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 7;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ShabbaToDooDbContext>()
                 .AddDefaultTokenProviders();
 
             return services;

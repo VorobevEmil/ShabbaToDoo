@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShabbaToDoo.Application.Authentication.Common;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
 
-namespace ShabbaToDoo.Application.Authentication.Commands.Register
+namespace ShabbaToDoo.Application.CQRS.Authentication.Commands.Register
 {
     public record RegisterCommand(
         string FirstName,

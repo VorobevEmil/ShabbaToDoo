@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using ShabbaToDoo.Application.Common.Interfaces.Authentication;
 using ShabbaToDoo.Domain.Entities;
 using ShabbaToDoo.Domain.Common.Errors;
-using ShabbaToDoo.Application.Authentication.Common;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
 
-namespace ShabbaToDoo.Application.Authentication.Queries.Login
+namespace ShabbaToDoo.Application.CQRS.Authentication.Queries.Login
 {
     public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
     {

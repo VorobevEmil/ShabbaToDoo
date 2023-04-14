@@ -4,14 +4,14 @@ using ShabbaToDoo.Domain.Entities;
 
 namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
 {
-    public class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    public class ProjectConfiguration : IEntityTypeConfiguration<ProjectTodo>
     {
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<ProjectTodo> builder)
         {
             ConfigureProjectsTable(builder);
         }
 
-        private void ConfigureProjectsTable(EntityTypeBuilder<Project> builder)
+        private void ConfigureProjectsTable(EntityTypeBuilder<ProjectTodo> builder)
         {
             builder.ToTable("Projects");
 
@@ -32,7 +32,7 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
                 .WithOne(right => right.Project)
                 .HasForeignKey(x => x.ProjectId);
 
-            builder.HasMany(left => left.Users)
+            builder.HasMany(left => left.Members)
                 .WithMany(right => right.Projects)
                 .UsingEntity(join => join.ToTable("UserProjects"));
         }

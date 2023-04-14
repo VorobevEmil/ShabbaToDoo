@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShabbaToDoo.Application.Authentication.Common;
+using ShabbaToDoo.Application.CQRS.Authentication.Common;
 
-namespace ShabbaToDoo.Application.Authentication.Queries.Login
+namespace ShabbaToDoo.Application.CQRS.Authentication.Queries.Login
 {
     public record LoginQuery(
         string Email,

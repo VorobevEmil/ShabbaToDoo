@@ -34,6 +34,10 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
             builder.HasMany(left => left.Comments)
                 .WithOne(right => right.Todo)
                 .HasForeignKey(x => x.TodoId);
+
+            builder.HasOne(left => left.User)
+                .WithMany(right => right.Todos)
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

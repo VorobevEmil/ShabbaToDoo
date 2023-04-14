@@ -11,9 +11,9 @@ using ShabbaToDoo.Infrastructure.Persistence;
 
 namespace ShabbaToDoo.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230412080920_Added_Init_Entities")]
-    partial class Added_Init_Entities
+    [DbContext(typeof(ShabbaToDooDbContext))]
+    [Migration("20230412173716_Added_Init_Entity")]
+    partial class Added_Init_Entity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,17 +25,17 @@ namespace ShabbaToDoo.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ApplicationUserProject", b =>
+            modelBuilder.Entity("ApplicationUserProjectTodo", b =>
                 {
+                    b.Property<string>("MembersId")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("ProjectsId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("UsersId")
-                        .HasColumnType("text");
+                    b.HasKey("MembersId", "ProjectsId");
 
-                    b.HasKey("ProjectsId", "UsersId");
-
-                    b.HasIndex("UsersId");
+                    b.HasIndex("ProjectsId");
 
                     b.ToTable("UserProjects", (string)null);
                 });
@@ -246,7 +246,7 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.Project", b =>
+            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.ProjectTodo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -327,17 +327,17 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                     b.ToTable("TodoItems", (string)null);
                 });
 
-            modelBuilder.Entity("ApplicationUserProject", b =>
+            modelBuilder.Entity("ApplicationUserProjectTodo", b =>
                 {
-                    b.HasOne("ShabbaToDoo.Domain.Entities.Project", null)
+                    b.HasOne("ShabbaToDoo.Domain.Entities.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("ProjectsId")
+                        .HasForeignKey("MembersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShabbaToDoo.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("ShabbaToDoo.Domain.Entities.ProjectTodo", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("ProjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -393,7 +393,7 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.Project", b =>
+            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.ProjectTodo", b =>
                 {
                     b.HasOne("ShabbaToDoo.Domain.Entities.ApplicationUser", "Author")
                         .WithMany("AuthorProjects")
@@ -417,7 +417,7 @@ namespace ShabbaToDoo.Infrastructure.Migrations
 
             modelBuilder.Entity("ShabbaToDoo.Domain.Entities.TodoItem", b =>
                 {
-                    b.HasOne("ShabbaToDoo.Domain.Entities.Project", "Project")
+                    b.HasOne("ShabbaToDoo.Domain.Entities.ProjectTodo", "Project")
                         .WithMany("TodoItems")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -431,7 +431,7 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                     b.Navigation("AuthorProjects");
                 });
 
-            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.Project", b =>
+            modelBuilder.Entity("ShabbaToDoo.Domain.Entities.ProjectTodo", b =>
                 {
                     b.Navigation("TodoItems");
                 });

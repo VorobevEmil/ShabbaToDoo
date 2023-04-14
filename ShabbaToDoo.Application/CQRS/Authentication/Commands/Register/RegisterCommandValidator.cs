@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ShabbaToDoo.Application.Authentication.Commands.Register
+namespace ShabbaToDoo.Application.CQRS.Authentication.Commands.Register
 {
     public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
