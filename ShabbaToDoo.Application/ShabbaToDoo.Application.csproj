@@ -18,9 +18,4 @@
     <ProjectReference Include="..\ShabbaToDoo.Domain\ShabbaToDoo.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Interfaces\Persistence\" />
-    <Folder Include="Common\Interfaces\Services\" />
-  </ItemGroup>
-
 </Project>

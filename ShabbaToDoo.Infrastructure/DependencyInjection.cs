@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using ShabbaToDoo.Application.Common.Interfaces.Authentication;
 using ShabbaToDoo.Infrastructure.Authentication;
-using ShabbaToDoo.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ShabbaToDoo.Application.Common.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using ShabbaToDoo.Application.Common.Interfaces.Persistence;
+using ShabbaToDoo.Application.Common.Interfaces.Services;
 using ShabbaToDoo.Domain.Entities;
 using ShabbaToDoo.Infrastructure.Persistence;
 using ShabbaToDoo.Infrastructure.Persistence.Repositories;
+using ShabbaToDoo.Infrastructure.Services;
 
 namespace ShabbaToDoo.Infrastructure
 {
@@ -35,11 +35,14 @@ namespace ShabbaToDoo.Infrastructure
             services.AddDbContext<ShabbaToDooDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IProjectRepository, ProjectRepository>();
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IProjectService, ProjectService>();
+
             return services;
         }
 
