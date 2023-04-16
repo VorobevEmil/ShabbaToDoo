@@ -113,7 +113,7 @@ namespace ShabbaToDoo.Infrastructure.Services
                 return (default!, Errors.Project<T>.NotFound);
             }
 
-            if (project.AuthorId != _userId && (members && project.Members.All(x => x.Id != _userId)))
+            if (project.AuthorId != _userId && (!members || project.Members.All(x => x.Id != _userId)))
             {
                 return (default!, Errors.Project<T>.NoAccess);
             }

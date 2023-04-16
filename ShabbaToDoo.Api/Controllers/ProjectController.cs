@@ -81,18 +81,20 @@ namespace ShabbaToDoo.Api.Controllers
             var updateResult = await _mediator.Send(command);
 
             return updateResult.Match(
-                updateProjectResponse => Ok(updateProjectResponse),
+                updateProjectResponse => updateProjectResponse ? Ok() : BadRequest(),
                 Problem);
         }
 
-        [HttpPost("add-members")]
-        public async Task<IActionResult> AddMembers(ProjectAddMembersRequest request)
+        [HttpPut("add-members/{id}")]
+        public async Task<IActionResult> AddMembers(Guid id, ProjectAddMembersRequest request)
         {
             var command = _mapper.Map<AddMembersCommand>(request);
+            command = command with { Id = id };
+
             var result = await _mediator.Send(command);
 
             return result.Match(
-                addMembersResult => Ok(),
+                addMembersResult => addMembersResult ? Ok() : BadRequest(),
                 Problem);
         }
 
@@ -105,7 +107,7 @@ namespace ShabbaToDoo.Api.Controllers
             ErrorOr<bool> deleteResult = await _mediator.Send(command);
 
             return deleteResult.Match(
-                deleteProjectResult => NoContent(),
+                deleteProjectResult => deleteProjectResult ? NoContent() : BadRequest(),
                 Problem);
         }
     }

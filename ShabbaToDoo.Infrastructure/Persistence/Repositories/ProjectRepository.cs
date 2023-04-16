@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShabbaToDoo.Application.Common.Interfaces.Persistence;
 using ShabbaToDoo.Domain.Entities;
-using ShabbaToDoo.Infrastructure.Persistence.Repositories.Extensions;
 
 namespace ShabbaToDoo.Infrastructure.Persistence.Repositories
 {
