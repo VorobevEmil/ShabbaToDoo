@@ -16,7 +16,7 @@ namespace ShabbaToDoo.Application.CQRS.Project.Queries.ProjectById
 
         public async Task<ErrorOr<ProjectTodo>> Handle(ProjectByIdQuery query, CancellationToken cancellationToken)
         {
-            return await _service.GetProjectById(query.Id);
+            return await _service.GetProjectByIdAsync(query.Id);
         }
     }
 }

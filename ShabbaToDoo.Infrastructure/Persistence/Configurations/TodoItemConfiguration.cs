@@ -21,7 +21,7 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
                 .HasMaxLength(100)
                 .IsRequired();
 
-            builder.Property(x => x.Details)
+            builder.Property(x => x.Deadline)
                 .HasMaxLength(100);
 
             builder.Property(x => x.CreationDate)
@@ -35,9 +35,9 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
                 .WithOne(right => right.Todo)
                 .HasForeignKey(x => x.TodoId);
 
-            builder.HasOne(left => left.User)
+            builder.HasOne(left => left.Author)
                 .WithMany(right => right.Todos)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.AuthorId);
         }
     }
 }

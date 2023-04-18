@@ -9,5 +9,6 @@
         public ApplicationUser Author { get; set; } = default!;
         public List<ApplicationUser> Members { get; set; } = new();
         public List<TodoItem> TodoItems { get; set; } = new();
+        public DateTime CreationDate { get; set; }
     }
 }

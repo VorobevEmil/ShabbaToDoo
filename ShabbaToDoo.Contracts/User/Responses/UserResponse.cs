@@ -1,4 +1,4 @@
-﻿namespace ShabbaToDoo.Contracts.Common
+﻿namespace ShabbaToDoo.Contracts.User.Responses
 {
     public record UserResponse
     (

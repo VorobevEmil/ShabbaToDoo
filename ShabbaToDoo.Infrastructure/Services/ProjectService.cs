@@ -6,8 +6,8 @@ using ShabbaToDoo.Application.Common.Interfaces.Services;
 using ShabbaToDoo.Application.CQRS.Project.Commands.AddMembers;
 using ShabbaToDoo.Application.CQRS.Project.Commands.Create;
 using ShabbaToDoo.Application.CQRS.Project.Commands.Update;
-using ShabbaToDoo.Domain.Common.Errors;
 using ShabbaToDoo.Domain.Entities;
+using ShabbaToDoo.Infrastructure.Helpers;
 using ShabbaToDoo.Infrastructure.Persistence.Repositories.Extensions;
 
 namespace ShabbaToDoo.Infrastructure.Services
@@ -26,35 +26,21 @@ namespace ShabbaToDoo.Infrastructure.Services
 
         public async Task<ErrorOr<List<ProjectTodo>>> GetProjectsAvailableUserAsync()
         {
-            var projectQueryable = _repository.Project
-                .IncludeAuthor()
-                .IncludeMembers();
-
-            return await _repository.GetProjectsAvailableUserAsync(projectQueryable, _userId);
+            return await _repository.GetProjectsAvailableUserAsync(_userId);
         }
 
         public async Task<ErrorOr<List<ProjectTodo>>> GetUserProjectsAsync()
         {
-            var projectQueryable = _repository.Project
-                .IncludeAuthor();
-
-            return await _repository.GetUserProjectsAsync(projectQueryable, _userId);
+            return await _repository.GetUserProjectsAsync(_userId);
         }
 
-        public async Task<ErrorOr<ProjectTodo>> GetProjectById(Guid id)
+        public async Task<ErrorOr<ProjectTodo>> GetProjectByIdAsync(Guid id)
         {
-            var projectQueryable = _repository.Project
-                .IncludeAuthor()
-                .IncludeMembers();
+            var project = (await _repository.GetByIdAsync(id, true, true))!;
 
-            var result = await AccessProjectIfUserHasRight<ProjectTodo>(id, projectQueryable, true);
-
-            if (result.error.IsError)
-            {
-                return result.error;
-            }
-
-            var project = result.project;
+            var error = ProjectAccessHelper.AccessProjectIfUserAuthorOrMembers(project, _userId);
+            if (error != default)
+                return error;
 
             return project;
         }
@@ -63,18 +49,17 @@ namespace ShabbaToDoo.Infrastructure.Services
         {
             var project = request.Project;
             project.AuthorId = _userId;
+            project.CreationDate = DateTime.UtcNow;
             return await _repository.CreateAsync(project);
         }
 
         public async Task<ErrorOr<bool>> UpdateAsync(UpdateProjectCommand request)
         {
-            var result = await AccessProjectIfUserHasRight<bool>(request.Id, _repository.Project);
-            if (result.error.IsError)
-            {
-                return result.error;
-            }
+            var project = (await _repository.GetByIdAsync(request.Id))!;
 
-            var project = result.project;
+            var error = ProjectAccessHelper.AccessProjectIfUserAuthor(project, _userId);
+            if (error != default)
+                return error;
 
             project.Title = request.Title;
             project.Details = request.Details;
@@ -84,41 +69,24 @@ namespace ShabbaToDoo.Infrastructure.Services
 
         public async Task<ErrorOr<bool>> AddMembersAsync(AddMembersCommand request)
         {
-            var result = await AccessProjectIfUserHasRight<bool>(request.Id, _repository.Project);
-            if (result.error.IsError)
-            {
-                return result.error;
-            }
+            var project = await _repository.GetByIdAsync(request.Id);
+
+            var error = ProjectAccessHelper.AccessProjectIfUserAuthor(project, _userId);
+            if (error != default)
+                return error;
 
             return await _repository.AddMembersAsync(request.Id, request.UserIds);
         }
 
         public async Task<ErrorOr<bool>> DeleteAsync(Guid id)
         {
-            var result = await AccessProjectIfUserHasRight<bool>(id, _repository.Project);
-            if (result.error.IsError)
-            {
-                return result.error;
-            }
+            var project = (await _repository.GetByIdAsync(id))!;
 
-            return await _repository.DeleteAsync(result.project);
-        }
+            var error = ProjectAccessHelper.AccessProjectIfUserAuthor(project, _userId);
+            if (error != default)
+                return error;
 
-        private async Task<(ProjectTodo project, ErrorOr<T> error)> AccessProjectIfUserHasRight<T>(Guid id, IQueryable<ProjectTodo> projectQueryable, bool members = false)
-        {
-            var project = await _repository.GetByIdAsync(projectQueryable, id);
-
-            if (project is null)
-            {
-                return (default!, Errors.Project<T>.NotFound);
-            }
-
-            if (project.AuthorId != _userId && (!members || project.Members.All(x => x.Id != _userId)))
-            {
-                return (default!, Errors.Project<T>.NoAccess);
-            }
-
-            return (project, default);
+            return await _repository.DeleteAsync(project);
         }
     }
 }

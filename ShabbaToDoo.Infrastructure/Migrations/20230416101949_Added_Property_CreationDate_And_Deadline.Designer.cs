@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShabbaToDoo.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ShabbaToDoo.Infrastructure.Persistence;
 namespace ShabbaToDoo.Infrastructure.Migrations
 {
     [DbContext(typeof(ShabbaToDooDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230416101949_Added_Property_CreationDate_And_Deadline")]
+    partial class Added_Property_CreationDate_And_Deadline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,10 +311,6 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -336,11 +335,15 @@ namespace ShabbaToDoo.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TodoItems", (string)null);
                 });
@@ -443,21 +446,21 @@ namespace ShabbaToDoo.Infrastructure.Migrations
 
             modelBuilder.Entity("ShabbaToDoo.Domain.Entities.TodoItem", b =>
                 {
-                    b.HasOne("ShabbaToDoo.Domain.Entities.ApplicationUser", "Author")
-                        .WithMany("Todos")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ShabbaToDoo.Domain.Entities.ProjectTodo", "Project")
                         .WithMany("TodoItems")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.HasOne("ShabbaToDoo.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("Todos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShabbaToDoo.Domain.Entities.ApplicationUser", b =>

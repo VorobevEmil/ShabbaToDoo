@@ -9,7 +9,8 @@ using ShabbaToDoo.Application.CQRS.Project.Commands.Update;
 using ShabbaToDoo.Application.CQRS.Project.Queries.ProjectById;
 using ShabbaToDoo.Application.CQRS.Project.Queries.ProjectsAvailableUser;
 using ShabbaToDoo.Application.CQRS.Project.Queries.UserProjects;
-using ShabbaToDoo.Contracts.Project;
+using ShabbaToDoo.Contracts.Project.Requests;
+using ShabbaToDoo.Contracts.Project.Responses;
 
 namespace ShabbaToDoo.Api.Controllers
 {
@@ -33,7 +34,7 @@ namespace ShabbaToDoo.Api.Controllers
             var result = await _mediator.Send(command);
 
             return result.Match(
-                projectResponse => Ok(_mapper.Map<List<ProjectResponse>>(projectResponse)),
+                projectResponse => Ok(_mapper.Map<List<ProjectListResponse>>(projectResponse)),
                 Problem);
         }
 
@@ -45,7 +46,7 @@ namespace ShabbaToDoo.Api.Controllers
             var result = await _mediator.Send(command);
 
             return result.Match(
-                projectResponse => Ok(_mapper.Map<List<ProjectResponse>>(projectResponse)),
+                projectResponse => Ok(_mapper.Map<List<ProjectListResponse>>(projectResponse)),
                 Problem);
         }
 
@@ -57,7 +58,7 @@ namespace ShabbaToDoo.Api.Controllers
             var result = await _mediator.Send(command);
 
             return result.Match(
-                projectResponse => Ok(_mapper.Map<ProjectUsersResponse>(projectResponse)),
+                projectResponse => Ok(_mapper.Map<ProjectByIdResponse>(projectResponse)),
                 Problem);
         }
 
@@ -66,10 +67,10 @@ namespace ShabbaToDoo.Api.Controllers
         {
             var command = _mapper.Map<CreateProjectCommand>(request);
 
-            var createResult = await _mediator.Send(command);
+            var createCommandResult = await _mediator.Send(command);
 
-            return createResult.Match(
-                createProjectResponse => Ok(_mapper.Map<ProjectResponse>(createProjectResponse)),
+            return createCommandResult.Match(
+                createProjectResponse => CreatedAtAction(nameof(GetProjectById), new { id = createProjectResponse.Id }, _mapper.Map<ProjectListResponse>(createProjectResponse)),
                 Problem);
         }
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShabbaToDoo.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ShabbaToDoo.Infrastructure.Persistence;
 namespace ShabbaToDoo.Infrastructure.Migrations
 {
     [DbContext(typeof(ShabbaToDooDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230418142740_Edit_Property_In_TodoItem_From_User_To_Author")]
+    partial class Edit_Property_In_TodoItem_From_User_To_Author
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,14 +1,14 @@
 ﻿using Mapster;
-using ShabbaToDoo.Contracts.User.Responses;
+using ShabbaToDoo.Contracts.Comment.Responses;
 using ShabbaToDoo.Domain.Entities;
 
 namespace ShabbaToDoo.Api.Common.Mapping
 {
-    public class UserMappingConfig : IRegister
+    public class CommentMappingConfig : IRegister
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<ApplicationUser, UserResponse>();
+            config.NewConfig<TodoComment, CommentResponse>();
         }
     }
 }

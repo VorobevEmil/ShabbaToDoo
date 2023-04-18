@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShabbaToDoo.Application.Common.Interfaces.Persistence;
 using ShabbaToDoo.Domain.Entities;
+using ShabbaToDoo.Infrastructure.Persistence.Repositories.Extensions;
 
 namespace ShabbaToDoo.Infrastructure.Persistence.Repositories
 {
@@ -13,23 +14,34 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public IQueryable<ProjectTodo> Project => _context.Projects.AsQueryable();
+        public IQueryable<ProjectTodo> Projects => _context.Projects.AsQueryable();
 
-        public async Task<ProjectTodo?> GetByIdAsync(IQueryable<ProjectTodo> project, Guid id)
+        public async Task<ProjectTodo?> GetByIdAsync(Guid id, bool includeAuthor = false, bool includeMembers = false)
         {
-            return await project.FirstOrDefaultAsync(x => x.Id == id);
+            var projects = _context.Projects.AsQueryable();
+
+            if (includeAuthor)
+                projects = projects.IncludeAuthor();
+
+            if (includeMembers)
+                projects = projects.IncludeMembers();
+
+            return await projects.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<ProjectTodo>> GetProjectsAvailableUserAsync(IQueryable<ProjectTodo> project, string userId)
+        public async Task<List<ProjectTodo>> GetProjectsAvailableUserAsync(string userId)
         {
-            return await project
+            return await _context.Projects
+                .IncludeAuthor()
+                .IncludeMembers()
                 .Where(x => x.AuthorId == userId || x.Members.Any(t => t.Id == userId))
                 .ToListAsync();
         }
 
-        public async Task<List<ProjectTodo>> GetUserProjectsAsync(IQueryable<ProjectTodo> project, string userId)
+        public async Task<List<ProjectTodo>> GetUserProjectsAsync(string userId)
         {
-            return await project
+            return await _context.Projects
+                .IncludeAuthor()
                 .Where(x => x.AuthorId == userId)
                 .ToListAsync();
         }
@@ -55,7 +67,7 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Repositories
                  .FirstAsync(x => x.Id == id);
 
             var users = await _context.Users
-                .Where(x => requestUserIds.Any(t => t ==x.Id))
+                .Where(x => requestUserIds.Any(t => t == x.Id))
                 .ToListAsync();
 
             project.Members.AddRange(users);

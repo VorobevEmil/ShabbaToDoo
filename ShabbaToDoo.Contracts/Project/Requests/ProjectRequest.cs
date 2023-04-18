@@ -1,4 +1,4 @@
-﻿namespace ShabbaToDoo.Contracts.Project
+﻿namespace ShabbaToDoo.Contracts.Project.Requests
 {
     public record ProjectRequest
     (

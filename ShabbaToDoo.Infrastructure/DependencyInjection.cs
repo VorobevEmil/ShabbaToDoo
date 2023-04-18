@@ -36,12 +36,15 @@ namespace ShabbaToDoo.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITodoRepository, TodoRepository>();
+
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITodoService, TodoService>();
 
             return services;
         }

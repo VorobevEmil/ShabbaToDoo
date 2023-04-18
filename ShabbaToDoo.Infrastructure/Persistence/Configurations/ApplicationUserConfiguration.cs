@@ -30,8 +30,8 @@ namespace ShabbaToDoo.Infrastructure.Persistence.Configurations
                 .UsingEntity(join => join.ToTable("UserProjects"));
 
             builder.HasMany(left => left.Todos)
-                .WithOne(right => right.User)
-                .HasForeignKey(x => x.UserId);
+                .WithOne(right => right.Author)
+                .HasForeignKey(x => x.AuthorId);
 
             builder.HasMany(left => left.Comments)
                 .WithOne(right => right.User)

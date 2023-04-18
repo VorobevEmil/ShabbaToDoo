@@ -10,7 +10,7 @@ namespace ShabbaToDoo.Application.Common.Interfaces.Services
     {
         Task<ErrorOr<List<ProjectTodo>>> GetProjectsAvailableUserAsync();
         Task<ErrorOr<List<ProjectTodo>>> GetUserProjectsAsync();
-        Task<ErrorOr<ProjectTodo>> GetProjectById(Guid id);
+        Task<ErrorOr<ProjectTodo>> GetProjectByIdAsync(Guid id);
         Task<ErrorOr<ProjectTodo>> CreateAsync(CreateProjectCommand request);
         Task<ErrorOr<bool>> UpdateAsync(UpdateProjectCommand request);
         Task<ErrorOr<bool>> AddMembersAsync(AddMembersCommand request);
