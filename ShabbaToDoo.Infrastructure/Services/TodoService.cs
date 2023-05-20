@@ -12,7 +12,6 @@ using ShabbaToDoo.Application.CQRS.Todo.Queries.TodosForProject;
 using ShabbaToDoo.Domain.Common.Errors;
 using ShabbaToDoo.Domain.Entities;
 using ShabbaToDoo.Infrastructure.Helpers;
-using ShabbaToDoo.Infrastructure.Persistence.Repositories.Extensions;
 
 namespace ShabbaToDoo.Infrastructure.Services
 {

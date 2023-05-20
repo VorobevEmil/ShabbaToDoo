@@ -37,6 +37,7 @@ namespace ShabbaToDoo.Infrastructure
 
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
 
             return services;
         }
@@ -45,6 +46,7 @@ namespace ShabbaToDoo.Infrastructure
         {
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<ITodoService, TodoService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             return services;
         }
